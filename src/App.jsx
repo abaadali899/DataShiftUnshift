@@ -4,11 +4,11 @@ import ButtonComponent from './components/ButtonComponent';
 
 const App = () => {
   const [leftItems, setLeftItems] = useState([
-    { id: 1, label: 'Item 1' },
-    { id: 2, label: 'Item 2' },
-    { id: 3, label: 'Item 3' },
-    { id: 4, label: 'Item 4' },
-    { id: 5, label: 'Item 5' },
+    { id: 1, label: '1' },
+    { id: 2, label: '2' },
+    { id: 3, label: '3' },
+    { id: 4, label: '4' },
+    { id: 5, label: '5' },
   ]);
 
   const [rightItems, setRightItems] = useState([]);
@@ -34,17 +34,17 @@ const App = () => {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent:"center" }}>
       <DivComponent items={leftItems} selectedItems={selectedLeft} setSelectedItems={setSelectedLeft} />
-      <div style={{ paddingTop: "150px", marginLeft:"40px", marginRight:"40px" }}>
+      <div style={{ paddingTop: "50px", marginLeft:"20px", marginRight:"20px" }}>
         <ButtonComponent 
-          label="Shift" 
+          label=">" 
           onClick={handleShift} 
           disabled={selectedLeft.length === 0} 
         />
         <br/>
         <br/>
-        <br/>
+        
         <ButtonComponent 
-          label="Unshift" 
+          label="<" 
           onClick={handleUnshift} 
           disabled={selectedRight.length === 0} 
         />
