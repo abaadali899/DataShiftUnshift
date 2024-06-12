@@ -1,57 +1,69 @@
-import   { useState } from 'react';
-import DivComponent from './components/DivComponent';
-import ButtonComponent from './components/ButtonComponent';
+import React, { useState } from 'react';
+import Button from './components/Button';
+import RightDiv from './components/RightDiv';
+import LeftDiv from './components/LeftDiv';
+import './App.css';
+ 
 
 const App = () => {
   const [leftItems, setLeftItems] = useState([
-    { id: 1, label: '1' },
-    { id: 2, label: '2' },
-    { id: 3, label: '3' },
-    { id: 4, label: '4' },
-    { id: 5, label: '5' },
+    { label: '1', checked: false },
+    { label: '2', checked: false },
+    { label: '3', checked: false },
+    { label: '4', checked: false },
+    { label: '5', checked: false },
   ]);
 
   const [rightItems, setRightItems] = useState([]);
-  const [selectedLeft, setSelectedLeft] = useState([]);
-  const [selectedRight, setSelectedRight] = useState([]);
+  const [shiftEnabled, setShiftEnabled] = useState(false);
+  const [unshiftEnabled, setUnshiftEnabled] = useState(false);
+
+  const handleCheckBoxChange = (label, isLeftDiv) => {
+    if (isLeftDiv) {
+      const updatedLeftItems = leftItems.map((item) =>
+        item.label === label ? { ...item, checked: !item.checked } : item
+      );
+      setLeftItems(updatedLeftItems);
+      setShiftEnabled(updatedLeftItems.some((item) => item.checked));
+    } else {
+      const updatedRightItems = rightItems.map((item) =>
+        item.label === label ? { ...item, checked: !item.checked } : item
+      );
+      setRightItems(updatedRightItems);
+      setUnshiftEnabled(updatedRightItems.some((item) => !item.checked));
+    }
+  };
 
   const handleShift = () => {
-    const newLeftItems = leftItems.filter(item => !selectedLeft.includes(item));
-    const newRightItems = rightItems.concat(selectedLeft);
-    setLeftItems(newLeftItems);
-    setRightItems(newRightItems);
-    setSelectedLeft([]);
+    const itemsToShift = leftItems.filter((item) => item.checked).map((item) => ({ ...item, checked: true }));
+    setRightItems(rightItems.concat(itemsToShift));
+    setLeftItems(leftItems.filter((item) => !item.checked));
+    setShiftEnabled(false);
   };
 
   const handleUnshift = () => {
-    const newRightItems = rightItems.filter(item => !selectedRight.includes(item));
-    const newLeftItems = leftItems.concat(selectedRight);
-    setRightItems(newRightItems);
-    setLeftItems(newLeftItems);
-    setSelectedRight([]);
+    const itemsToUnshift = rightItems.filter((item) => !item.checked).map((item) => ({ ...item, checked: false }));
+    setLeftItems(leftItems.concat(itemsToUnshift));
+    setRightItems(rightItems.filter((item) => item.checked));
+    setUnshiftEnabled(false);
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent:"center" }}>
-      <DivComponent items={leftItems} selectedItems={selectedLeft} setSelectedItems={setSelectedLeft} />
-      <div style={{ paddingTop: "50px", marginLeft:"20px", marginRight:"20px" }}>
-        <ButtonComponent 
-          label=">" 
-          onClick={handleShift} 
-          disabled={selectedLeft.length === 0} 
-        />
-        <br/>
-        <br/>
+    <div className="app">
+      <LeftDiv items={leftItems} onCheckBoxChange={(label, isLeftDiv) => handleCheckBoxChange(label, isLeftDiv)} />
+      <div className="buttons">
+        <Button onClick={handleShift} disabled={!shiftEnabled} label=">"/>
         
-        <ButtonComponent 
-          label="<" 
-          onClick={handleUnshift} 
-          disabled={selectedRight.length === 0} 
-        />
+        <Button onClick={handleUnshift} disabled={!unshiftEnabled} label="<" />
       </div>
-      <DivComponent items={rightItems} selectedItems={selectedRight} setSelectedItems={setSelectedRight} />
+      <RightDiv items={rightItems} onCheckBoxChange={(label, isLeftDiv) => handleCheckBoxChange(label, isLeftDiv)} />
     </div>
   );
 };
-
 export default App;
+
+
+
+
+
+ 
