@@ -15,7 +15,7 @@
 
 .left-div, .right-div {
   border: 1px solid black;
-  width: 180px;
+  width: 220px;
   height: 210px;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
 }
 
 .left-div {
-  margin-right: 100px;
+  margin-right: 50px;
 }
 
 .right-div {
@@ -38,13 +38,14 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  margin-top: -100px!important;
 }
 
 button {
   margin: 10px 0;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   background-color: rgb(148,163,184);
 }

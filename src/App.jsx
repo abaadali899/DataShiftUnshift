@@ -18,7 +18,7 @@ const App = () => {
   const [isUnshiftActive, setIsUnshiftActive] = useState(false);
 
   useEffect(() => {
-    setIsShiftActive(leftCheckboxes.some(cb => cb.checked));
+    setIsShiftActive(leftCheckboxes.some(checkbox => checkbox.checked));
   }, [leftCheckboxes]);
 
   useEffect(() => {
@@ -27,46 +27,46 @@ const App = () => {
 
   const handleCheckboxChange = (id, checked, side) => {
     if (side === 'left') {
-      const updatedCheckboxes = leftCheckboxes.map((cb) =>
-        cb.id === id ? { ...cb, checked } : cb
+      const updatedCheckboxes = leftCheckboxes.map((checkbox) =>
+        checkbox.id === id ? { ...checkbox, checked } : checkbox
       );
       setLeftCheckboxes(updatedCheckboxes);
     } else {
-      const updatedCheckboxes = rightCheckboxes.map((cb) =>
-        cb.id === id ? { ...cb, checked } : cb
+      const updatedCheckboxes = rightCheckboxes.map((checkbox) =>
+        checkbox.id === id ? { ...checkbox, checked } : checkbox
       );
       setRightCheckboxes(updatedCheckboxes);
     }
   };
 
   const handleShift = () => {
-    const selectedCheckboxes = leftCheckboxes.filter(cb => cb.checked);
-    const remainingCheckboxes = leftCheckboxes.filter(cb => !cb.checked);
+    const selectedCheckboxes = leftCheckboxes.filter(checkbox => checkbox.checked);
+    const remainingCheckboxes = leftCheckboxes.filter(checkbox => !checkbox.checked);
     setLeftCheckboxes(remainingCheckboxes);
-    setRightCheckboxes([...rightCheckboxes, ...selectedCheckboxes.map(cb => ({ ...cb, checked: true }))]);
+    setRightCheckboxes([...rightCheckboxes, ...selectedCheckboxes.map(checkbox => ({ ...checkbox, checked: true }))]);
   };
 
   const handleUnshift = () => {
-    setLeftCheckboxes([...leftCheckboxes, ...rightCheckboxes.map(cb => ({ ...cb, checked: false }))]);
+    setLeftCheckboxes([...leftCheckboxes, ...rightCheckboxes.map(checkbox => ({ ...checkbox, checked: false }))]);
     setRightCheckboxes([]);
   };
 
   return (
     <div className="App">
-      <DualDivContainer 
+      <DualDivContainer
         leftCheckboxes={leftCheckboxes}
         rightCheckboxes={rightCheckboxes}
         onCheckboxChange={handleCheckboxChange}
       />
       <div className="buttons">
-        <Button 
-          text=">" 
-          onClick={handleShift} 
+        <Button
+          text=">"
+          onClick={handleShift}
           isActive={isShiftActive}
         />
         <Button
-          text="<" 
-          onClick={handleUnshift} 
+          text="<"
+          onClick={handleUnshift}
           isActive={isUnshiftActive}
         />
       </div>
