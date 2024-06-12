@@ -1,6 +1,4 @@
- 
-import React from 'react';
-
+ import React from 'react';
 const Button = ({ onClick, disabled, label }) => {
   return (
     <button onClick={onClick} disabled={disabled} style={{width:"70px",height:"50px",

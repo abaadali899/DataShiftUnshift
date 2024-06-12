@@ -1,6 +1,4 @@
- 
-import React from 'react';
- 
+import React from 'react'; 
 import CheckBox from './CheckBox ';
 
 const LeftDiv = ({ items, onCheckBoxChange }) => {
