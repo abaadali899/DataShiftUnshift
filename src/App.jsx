@@ -1,69 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import DualDivContainer from './components/DualDivContainer';
 import Button from './components/Button';
-import RightDiv from './components/RightDiv';
-import LeftDiv from './components/LeftDiv';
 import './App.css';
- 
 
 const App = () => {
-  const [leftItems, setLeftItems] = useState([
-    { label: '1', checked: false },
-    { label: '2', checked: false },
-    { label: '3', checked: false },
-    { label: '4', checked: false },
-    { label: '5', checked: false },
-  ]);
+  const initialCheckboxes = [
+    { id: 1, label: '1', checked: false },
+    { id: 2, label: '2', checked: false },
+    { id: 3, label: '3', checked: false },
+    { id: 4, label: '4', checked: false },
+    { id: 5, label: '5', checked: false },
+  ];
 
-  const [rightItems, setRightItems] = useState([]);
-  const [shiftEnabled, setShiftEnabled] = useState(false);
-  const [unshiftEnabled, setUnshiftEnabled] = useState(false);
+  const [leftCheckboxes, setLeftCheckboxes] = useState(initialCheckboxes);
+  const [rightCheckboxes, setRightCheckboxes] = useState([]);
+  const [isShiftActive, setIsShiftActive] = useState(false);
+  const [isUnshiftActive, setIsUnshiftActive] = useState(false);
 
-  const handleCheckBoxChange = (label, isLeftDiv) => {
-    if (isLeftDiv) {
-      const updatedLeftItems = leftItems.map((item) =>
-        item.label === label ? { ...item, checked: !item.checked } : item
+  useEffect(() => {
+    setIsShiftActive(leftCheckboxes.some(cb => cb.checked));
+  }, [leftCheckboxes]);
+
+  useEffect(() => {
+    setIsUnshiftActive(rightCheckboxes.length > 0);
+  }, [rightCheckboxes]);
+
+  const handleCheckboxChange = (id, checked, side) => {
+    if (side === 'left') {
+      const updatedCheckboxes = leftCheckboxes.map((cb) =>
+        cb.id === id ? { ...cb, checked } : cb
       );
-      setLeftItems(updatedLeftItems);
-      setShiftEnabled(updatedLeftItems.some((item) => item.checked));
+      setLeftCheckboxes(updatedCheckboxes);
     } else {
-      const updatedRightItems = rightItems.map((item) =>
-        item.label === label ? { ...item, checked: !item.checked } : item
+      const updatedCheckboxes = rightCheckboxes.map((cb) =>
+        cb.id === id ? { ...cb, checked } : cb
       );
-      setRightItems(updatedRightItems);
-      setUnshiftEnabled(updatedRightItems.some((item) => !item.checked));
+      setRightCheckboxes(updatedCheckboxes);
     }
   };
 
   const handleShift = () => {
-    const itemsToShift = leftItems.filter((item) => item.checked).map((item) => ({ ...item, checked: true }));
-    setRightItems(rightItems.concat(itemsToShift));
-    setLeftItems(leftItems.filter((item) => !item.checked));
-    setShiftEnabled(false);
+    const selectedCheckboxes = leftCheckboxes.filter(cb => cb.checked);
+    const remainingCheckboxes = leftCheckboxes.filter(cb => !cb.checked);
+    setLeftCheckboxes(remainingCheckboxes);
+    setRightCheckboxes([...rightCheckboxes, ...selectedCheckboxes.map(cb => ({ ...cb, checked: true }))]);
   };
 
   const handleUnshift = () => {
-    const itemsToUnshift = rightItems.filter((item) => !item.checked).map((item) => ({ ...item, checked: false }));
-    setLeftItems(leftItems.concat(itemsToUnshift));
-    setRightItems(rightItems.filter((item) => item.checked));
-    setUnshiftEnabled(false);
+    setLeftCheckboxes([...leftCheckboxes, ...rightCheckboxes.map(cb => ({ ...cb, checked: false }))]);
+    setRightCheckboxes([]);
   };
 
   return (
-    <div className="app">
-      <LeftDiv items={leftItems} onCheckBoxChange={(label, isLeftDiv) => handleCheckBoxChange(label, isLeftDiv)} />
+    <div className="App">
+      <DualDivContainer 
+        leftCheckboxes={leftCheckboxes}
+        rightCheckboxes={rightCheckboxes}
+        onCheckboxChange={handleCheckboxChange}
+      />
       <div className="buttons">
-        <Button onClick={handleShift} disabled={!shiftEnabled} label=">"/>
-        
-        <Button onClick={handleUnshift} disabled={!unshiftEnabled} label="<" />
+        <Button 
+          text=">" 
+          onClick={handleShift} 
+          isActive={isShiftActive}
+        />
+        <Button
+          text="<" 
+          onClick={handleUnshift} 
+          isActive={isUnshiftActive}
+        />
       </div>
-      <RightDiv items={rightItems} onCheckBoxChange={(label, isLeftDiv) => handleCheckBoxChange(label, isLeftDiv)} />
     </div>
   );
 };
+
 export default App;
-
-
-
-
-
- 
