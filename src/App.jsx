@@ -17,6 +17,7 @@ const App = () => {
   const [isShiftActive, setIsShiftActive] = useState(false);
   const [isUnshiftActive, setIsUnshiftActive] = useState(false);
 
+  /////// use effect is being used here
   useEffect(() => {
     setIsShiftActive(leftCheckboxes.some(checkbox => checkbox.checked));
   }, [leftCheckboxes]);
