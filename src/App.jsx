@@ -20,6 +20,7 @@ const App = () => {
   useEffect(() => {
     setIsShiftActive(leftCheckboxes.some(checkbox => checkbox.checked));
   }, [leftCheckboxes]);
+   
 
   useEffect(() => {
     setIsUnshiftActive(rightCheckboxes.length > 0);
@@ -47,7 +48,7 @@ const App = () => {
   };
 
   const handleUnshift = () => {
-    setLeftCheckboxes([...leftCheckboxes, ...rightCheckboxes.map(checkbox => ({ ...checkbox, checked: false }))]);
+    setLeftCheckboxes([...leftCheckboxes, ...rightCheckboxes.map(checkbox => ({ ...checkbox, checked: true }))]);
     setRightCheckboxes([]);
   };
 
